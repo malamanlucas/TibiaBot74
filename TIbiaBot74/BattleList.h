@@ -14,4 +14,6 @@ public:
 	int creatureStartAddress;
 
 	shared_ptr<Creature> findCreature(int creatureId);
+	void readCreaturesVisible();
+	bool isVisible(shared_ptr<Creature> creature);
 };

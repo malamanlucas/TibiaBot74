@@ -23,6 +23,7 @@ public:
 	
 	shared_ptr<CreaturePos> myPos;
 
+	int id();
 	void refreshLastTargetId();
 	void follow(int creatureId);
 	void attack(int creatureId);
@@ -47,4 +48,6 @@ public:
 	void explosionTarget();
 	void paralyzeTarget();
 	const char* toString();
+	void moveItem(shared_ptr<ItemSearch> itemSearch, int xTo, int yTo, int zTo);
+	void moveItemTobackpack(shared_ptr<ItemSearch> itemSearch);
 };

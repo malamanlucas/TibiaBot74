@@ -50,6 +50,10 @@ int Player::healthPercent() {
 	return 0;
 }
 
+int Player::id() {
+	return *(int*)(this->zAddress - 0x8);
+}
+
 int Player::mana() {
 	return *(int*)(this->zAddress - 0x10);
 }
@@ -69,12 +73,9 @@ int Player::healthFull() {
 const char* Player::toString() {
 	stringstream buffer;
 	buffer.str();
-	buffer << "mana: " << this->mana();
-	buffer << " manaFull: " << this->manaFull();
-	buffer << " health: " << this->health();
-	buffer << " healthFull: " << this->healthFull();
-	buffer << " m: " << this->manaPercent() << "% ";
-	buffer << " h: " << this->healthPercent() << "% ";
+	buffer << "x: " << this->myPos->x();
+	buffer << " y: " << this->myPos->y();
+	buffer << " z: " << this->myPos->z();
 	return buffer.str().c_str();
 }
 
@@ -129,7 +130,7 @@ void Player::mfSelf() {
 
 void Player::sendRune(shared_ptr<ItemSearch> itemSearch, const shared_ptr<CreaturePos> creaturePos) {
 	int fromBp = 64 + itemSearch->bpPos;
-	
+
 	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB2A0)(0x83);
 	//pos = Position(0xFFFF, 0, 0); //means that is an item in inventory
 	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(65535); //xPos Item means
@@ -147,6 +148,43 @@ void Player::sendRune(shared_ptr<ItemSearch> itemSearch, const shared_ptr<Creatu
 	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(creaturePos->z());
 	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(99);
 	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(1);
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCBE00)(1);
+}
+
+void Player::moveItemTobackpack(shared_ptr<ItemSearch> itemSearch) {
+	int xTo = 65535;
+	int yTo = InventoryType::Backpack;
+	int zTo = 0;
+	this->moveItem(itemSearch, xTo, yTo, zTo);
+}
+
+void Player::moveItem(shared_ptr<ItemSearch> itemSearch, int xTo, int yTo, int zTo) {
+	int fromBp = 64 + itemSearch->bpPos;
+
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB2A0)(0x78);
+	//pos = Position(0xFFFF, 0, 0); //means that is an item in inventory
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(65535); //xPos Item means
+
+	//64 first bp opened, 65 second bp opened, and so on...
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(fromBp);
+
+	//0 first pos, 1 second pos
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(itemSearch->slotPos);
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(itemSearch->id); //uh
+
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(itemSearch->slotPos);
+
+	//65535 X (inventory) to
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(xTo);
+
+	//64 Y , bpsPos or typeInventory to
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(yTo);
+
+	//2 Z (slotPos) to
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(zTo);
+
+	//50 (amountItems)
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(itemSearch->amount);
 	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCBE00)(1);
 }
 

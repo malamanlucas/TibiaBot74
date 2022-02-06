@@ -11,6 +11,9 @@ using namespace std;
 shared_ptr<Player> player;
 shared_ptr<Containers> containers;
 shared_ptr<BattleList> battleList;
+shared_ptr<set<int>> idsBackpack;
+shared_ptr<set<int>> lootsAmountable;
+shared_ptr<set<int>> ignoreLoot;
 
 DWORD WINAPI HackThread(HMODULE hModule) {
 
@@ -38,8 +41,9 @@ DWORD WINAPI HackThread(HMODULE hModule) {
         if (GetAsyncKeyState(VK_END) & 1) {
             player->mfSelf();
         }
-        if (GetAsyncKeyState(VK_DELETE) & 1) {
+        if (GetAsyncKeyState(VK_DELETE) & 1) {            
             player->sdTarget();
+            //player->runeTarget(ItemId::LMM);
         }
         if (GetAsyncKeyState(VK_HOME) & 1) {
             player->paralyzeTarget();
@@ -49,6 +53,9 @@ DWORD WINAPI HackThread(HMODULE hModule) {
         }
         
         player->refreshLastTargetId();
+        containers->readContainersOpened();
+        containers->drawLoot();
+        //battleList->readCreaturesVisible();
         Sleep(10);
     }
 

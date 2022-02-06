@@ -12,7 +12,8 @@ public:
 	void loadItems();
 	int addressBase;
 	bool isOpened();
-	bool isCarrying();
+	bool isInside();
+	bool isDeadMonster();
 	int id();
 	char* name();
 	int maxItems();

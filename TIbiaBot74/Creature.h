@@ -17,6 +17,8 @@ public:
 
 	char* name();
 	int id();
+	int speed();
+	int isOnline();
 	int healthPercent();
 	const char* toString();
 };

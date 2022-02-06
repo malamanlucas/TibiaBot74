@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "Container.h"
 #include "ContainerItem.h"
+#include "tipos.h"
+
+extern shared_ptr<set<int>> idsBackpack;
 
 bool Container::isOpened() {
 	return *(int*)(this->addressBase - 0x4);
@@ -28,9 +31,14 @@ void Container::loadItems() {
 	}
 }
 
-bool Container::isCarrying() {
+bool Container::isDeadMonster() {
+	bool isNotBackpack = idsBackpack->find(this->id()) == idsBackpack->end();
+	return this->id() == ItemId::BAG || isNotBackpack;
+}
+
+bool Container::isInside() {
 	int value = *(int*)(this->addressBase + 0x30);
-	return value == 0;
+	return value == 1;
 }
 
 int Container::maxItems() {

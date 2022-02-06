@@ -9,4 +9,6 @@ public:
 	int id();
 	int amount();
 	bool isFilled();
+	bool isLootable();
+	bool isIgnorable();
 };
