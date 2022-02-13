@@ -22,4 +22,5 @@ public:
 	void readContainersOpened();
 	void drawLoot();
 	shared_ptr<ItemSearch> searchItem(ItemId itemId);
+	shared_ptr<ItemSearch> searchItem(shared_ptr<set<int>> itemsId);
 };

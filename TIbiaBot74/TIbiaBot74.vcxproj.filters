@@ -16,6 +16,9 @@
     <Filter Include="classes">
       <UniqueIdentifier>{af10228a-7a52-4bd5-87d2-2f5cd4bcf5b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="socket">
+      <UniqueIdentifier>{4b070a5a-a66e-4ec0-aa4d-6f2342fadc20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -54,6 +57,12 @@
     <ClInclude Include="Creature.h">
       <Filter>classes</Filter>
     </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketClient.h">
+      <Filter>socket</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -85,6 +94,12 @@
     </ClCompile>
     <ClCompile Include="BattleList.cpp">
       <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketClient.cpp">
+      <Filter>socket</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

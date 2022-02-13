@@ -29,5 +29,5 @@ bool ContainerItem::isLootable() {
 
 bool ContainerItem::isIgnorable() {
 	bool isIgnorable = ignoreLoot->find(this->id()) != ignoreLoot->end();
-	return isIgnorable;
+	return ItemId::BAG == this->id() || isIgnorable;
 }

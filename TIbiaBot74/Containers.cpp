@@ -26,6 +26,7 @@ void Containers::init() {
 	while (input >> a) {
 		lootsAmountable->insert(a);
 	}
+	input.close();
 
 	input.open("C:\\ferramentas\\ignoreLoots.txt");
 	while (input >> a) {
@@ -72,6 +73,31 @@ void Containers::loadContainers() {
 }
 
 shared_ptr<ItemSearch> Containers::searchItem(ItemId itemId) {
+	this->loadContainers();
+	auto itemSearch = make_shared<ItemSearch>();
+	int bpPos = 0;
+	int slotPos = 0;
+	for (auto containerIndex = this->containers.begin(); containerIndex < this->containers.end(); containerIndex++, bpPos++) {
+		auto container = containerIndex->get();
+		if (container->isOpened()) {
+			slotPos = 0;
+			for (auto item : container->items) {
+				if (item->id() == itemId && item->isFilled()) {
+					itemSearch->amount = item->amount();
+					itemSearch->slotPos = slotPos;
+					itemSearch->id = item->id();
+					itemSearch->bpPos = bpPos;
+					return itemSearch;
+				}
+				slotPos++;
+			}
+		}
+	}
+	return nullptr;
+}
+
+shared_ptr<ItemSearch> Containers::searchItem(shared_ptr<set<int>> itemsId) {
+	this->loadContainers();
 	auto itemSearch = make_shared<ItemSearch>();
 	int bpPos = 0;
 	int slotPos = 0;
@@ -81,18 +107,12 @@ shared_ptr<ItemSearch> Containers::searchItem(ItemId itemId) {
 			slotPos = 0;
 			for (auto itemIndex = container->items.begin(); itemIndex < container->items.end(); itemIndex++, slotPos++) {
 				auto item = itemIndex->get();
-				if (item->id() == itemId && item->isFilled()) {
+				bool found = itemsId->find(item->id()) != itemsId->end();
+				if (found && item->isFilled()) {
 					itemSearch->amount = item->amount();
 					itemSearch->slotPos = slotPos;
-					itemSearch->id = itemId;
+					itemSearch->id = item->id();
 					itemSearch->bpPos = bpPos;
-					/*if (itemSearch->bpPos == 0) {
-						if (container->isCarrying()) {
-							itemSearch->bpPos = bpPos + 1;
-						} else {
-							itemSearch->bpPos = bpPos;
-						}
-					}*/
 					return itemSearch;
 				}
 			}
@@ -102,13 +122,17 @@ shared_ptr<ItemSearch> Containers::searchItem(ItemId itemId) {
 }
 
 void Containers::drawLoot() {
-	int bpPos = 0;
+	this->loadContainers();
+	int bpPos = this->containers.size() - 1;
 	int slotPos = 0;
-	for (auto containerIndex = this->containers.begin(); containerIndex < this->containers.end(); containerIndex++, bpPos++) {
+	for (auto containerIndex = this->containers.rbegin(); containerIndex < this->containers.rend(); containerIndex++, bpPos--) {
 		auto container = containerIndex->get();
 		if (container->isOpened() && container->isDeadMonster()) {
-			slotPos = 0;
-			for (auto itemIndex = container->items.begin(); itemIndex < container->items.end(); itemIndex++, slotPos++) {
+			cout << "lendo " << bpPos << " container: " << container->toString() <<  ": " << endl;
+			slotPos = container->items.size() - 1;
+			for (auto itemIndex = container->items.rbegin(); itemIndex < container->items.rend(); itemIndex++, slotPos--) {
+				if (!container->isOpened() || !container->isDeadMonster())	break;
+				cout << " lendo " << slotPos << " item, ";
 				auto item = itemIndex->get();
 				if (item->isLootable()) {
 					auto itemSearch = make_shared<ItemSearch>();
@@ -116,10 +140,18 @@ void Containers::drawLoot() {
 					itemSearch->bpPos = bpPos;
 					itemSearch->slotPos = slotPos;
 					itemSearch->id = item->id();
-					player->moveItemTobackpack(itemSearch);
+					player->moveItemToBackpack(itemSearch);
 				}
-				
+				else if (!item->isIgnorable()) {
+					auto itemSearch = make_shared<ItemSearch>();
+					itemSearch->amount = item->amount();
+					itemSearch->bpPos = bpPos;
+					itemSearch->slotPos = slotPos;
+					itemSearch->id = item->id();
+					player->moveItemToFeet(itemSearch);
+				}
 			}
+			cout << endl << "------------------- " << endl << endl;
 		}
 	}
 }

@@ -159,7 +159,9 @@
     <ClInclude Include="ContainerItem.h" />
     <ClInclude Include="BattleList.h" />
     <ClInclude Include="Creature.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="ItemSearch.h" />
+    <ClInclude Include="SocketClient.h" />
     <ClInclude Include="tipos.h" />
     <ClInclude Include="include.h" />
     <ClInclude Include="Player.h" />
@@ -169,6 +171,7 @@
     <ClCompile Include="BattleList.cpp" />
     <ClCompile Include="ContainerItem.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="ItemSearch.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -181,6 +184,7 @@
     <ClCompile Include="Container.cpp" />
     <ClCompile Include="Containers.cpp" />
     <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="SocketClient.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

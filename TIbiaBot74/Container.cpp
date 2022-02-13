@@ -13,6 +13,7 @@ const char* Container::toString() {
 	stringstream buffer;
 	buffer.str();
 	buffer << "[isOpened: " << this->isOpened();
+	buffer << ", isDeadMonster: " << this->isDeadMonster();
 	buffer << " id: " << this->id() << " |";
 	for (auto item = this->items.begin(); item < this->items.end(); item++) {
 		buffer << "{" << item->get()->id() << "," << item->get()->amount() << "},";

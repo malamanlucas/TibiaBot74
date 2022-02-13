@@ -27,6 +27,25 @@ void Player::attack(int creatureId) {
 	this->setTargetId(creatureId);
 }
 
+void Player::autoHeal() {
+	if (this->healthPercent() < 40 && this->mana() > 70) {
+		stringstream buffer;
+		buffer << "Exura sio \"" << this->name();
+		this->say(buffer.str().c_str());
+	}
+}
+
+void Player::autoHealFriend() {
+	auto amigo = battleList->findFriend(80);
+	if (amigo != nullptr) {
+		this->sendItemCreature(ItemId::UH, amigo);
+		/*stringstream buffer;
+		buffer << "Exura sio \"" << amigo->name();
+		this->say(buffer.str().c_str());*/
+	}
+	
+}
+
 bool Player::isAttacking() {
 	return this->targetId() != 0;
 }
@@ -54,6 +73,10 @@ int Player::id() {
 	return *(int*)(this->zAddress - 0x8);
 }
 
+char* Player::name() {
+	return battleList->findMe()->name();
+}
+
 int Player::mana() {
 	return *(int*)(this->zAddress - 0x10);
 }
@@ -73,9 +96,7 @@ int Player::healthFull() {
 const char* Player::toString() {
 	stringstream buffer;
 	buffer.str();
-	buffer << "x: " << this->myPos->x();
-	buffer << " y: " << this->myPos->y();
-	buffer << " z: " << this->myPos->z();
+	buffer << "lastTarget: " << this->lastTargetId;
 	return buffer.str().c_str();
 }
 
@@ -84,18 +105,29 @@ void Player::say(const char* msg) {
 }
 
 void Player::uhSelf() {
-	this->useItemCreaturePos(ItemId::UH, this->myPos);
+	this->useItemCreaturePos(ItemId::UH, this->myPos, this->id());
 }
 
-void Player::useItemCreaturePos(ItemId itemId, shared_ptr<CreaturePos> pos) {
+void Player::useItemCreaturePos(ItemId itemId, shared_ptr<CreaturePos> pos, int creatureId) {
 	auto itemSearch = containers->searchItem(itemId);
 	if (itemSearch != nullptr) {
-		this->sendRune(itemSearch, pos);
+		cout << "Item Found" << endl;
+		//this->useItem(itemSearch, pos);
+		this->sendItem(itemSearch, creatureId);
+	}
+	else {
+		cout << "Item Not Found" << endl;
 	}
 }
 
 void Player::sendItemCreature(ItemId itemId, shared_ptr<Creature> creature) {
-	this->useItemCreaturePos(itemId, creature->pos);
+	if (creature->isOnline()) {
+		cout << "Creautre isOnline" << endl;
+		this->useItemCreaturePos(itemId, creature->pos, creature->id());
+	}
+	else {
+		cout << "Creautre not isOnline" << endl;
+	}
 }
 
 void Player::refreshLastTargetId() {
@@ -111,7 +143,38 @@ void Player::sdTarget() {
 void Player::runeTarget(ItemId itemId) {
 	auto creature = battleList->findCreature(this->lastTargetId);
 	if (creature != nullptr) {// found
+		cout << "achou creature" << endl;
 		this->sendItemCreature(itemId, creature);
+	}
+	else {
+		cout << "não achou creature" << endl;
+	}
+}
+
+void Player::antiPush() {
+	auto itemSearch = containers->searchItem(ItemId::EXPLOSION);
+	if (itemSearch != nullptr) {
+		this->moveItemToFeet(itemSearch);
+	}
+	itemSearch = containers->searchItem(ItemId::ENERGY_BOMB);
+	if (itemSearch != nullptr) {
+		this->moveItemToFeet(itemSearch);
+	}
+}
+
+void Player::runeEnemy(ItemId itemId) {
+	if (this->isAttacking()) {
+		this->runeTarget(itemId);
+	}
+	else {
+		auto creature = battleList->findEnemy();
+		if (creature != nullptr) {// found
+			this->attack(creature->id());
+			this->sendItemCreature(itemId, creature);
+		}
+		else {
+			this->runeTarget(itemId);
+		}
 	}
 }
 
@@ -125,10 +188,41 @@ void Player::explosionTarget() {
 
 
 void Player::mfSelf() {
-	this->useItemCreaturePos(ItemId::MF, this->myPos);
+	this->useItemCreaturePos(ItemId::MF, this->myPos, this->id());
 }
 
-void Player::sendRune(shared_ptr<ItemSearch> itemSearch, const shared_ptr<CreaturePos> creaturePos) {
+void Player::sendItemSelf(ItemId itemId) {
+	this->useItemCreaturePos(itemId, this->myPos, this->id());
+}
+
+void Player::mfSelfOldUltra() {
+	auto itemSearch = containers->searchItem(ItemId::MF);
+	if (itemSearch == nullptr) {
+		return;
+	}
+	int fromBp = 64 + itemSearch->bpPos;
+
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB2A0)(0x83);
+	//pos = Position(0xFFFF, 0, 0); //means that is an item in inventory
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(65535); //xPos Item means
+
+	//64 first bp opened, 65 second bp opened, and so on...
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(fromBp);
+
+	//0 first pos, 1 second pos
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(itemSearch->slotPos);
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(itemSearch->id); //uh
+
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(0);
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(this->myPos->x());
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(this->myPos->y());
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(this->myPos->z());
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(99);
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(2);
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCBE00)(1);
+}
+
+void Player::useItem(shared_ptr<ItemSearch> itemSearch, const shared_ptr<CreaturePos> creaturePos) {
 	int fromBp = 64 + itemSearch->bpPos;
 
 	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB2A0)(0x83);
@@ -151,14 +245,52 @@ void Player::sendRune(shared_ptr<ItemSearch> itemSearch, const shared_ptr<Creatu
 	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCBE00)(1);
 }
 
-void Player::moveItemTobackpack(shared_ptr<ItemSearch> itemSearch) {
+void Player::sendItem(shared_ptr<ItemSearch> itemSearch, int creatureId) {
+	cout << "chamando sendItem" << endl;
+	int fromBp = 64 + itemSearch->bpPos;
+
+	cout << itemSearch->toString() << endl;
+
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB2A0)(0x84);
+	cout << "Enviando 0x84" << endl;
+	//pos = Position(0xFFFF, 0, 0); //means that is an item in inventory
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(65535); //xPos Item means
+
+	//64 first bp opened, 65 second bp opened, and so on...
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(fromBp);
+
+	//0 first pos, 1 second pos
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(itemSearch->slotPos);
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(itemSearch->id); //uh
+
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(itemSearch->slotPos);
+
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB880)(creatureId);
+	cout << "creatureId: " << endl;
+	/*reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(0);
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(creaturePos->x());
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(creaturePos->y());
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(creaturePos->z());
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB6E0)(99);
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB540)(1);*/
+	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCBE00)(1);
+}
+
+void Player::moveItemToBackpack(shared_ptr<ItemSearch> itemSearch) {
+	cout << "moving item to backpack" << endl;
 	int xTo = 65535;
 	int yTo = InventoryType::Backpack;
 	int zTo = 0;
 	this->moveItem(itemSearch, xTo, yTo, zTo);
 }
 
+void Player::moveItemToFeet(shared_ptr<ItemSearch> itemSearch) {
+	cout << "moving item to feet" << endl;
+	this->moveItem(itemSearch, this->myPos->x(), this->myPos->y(), this->myPos->z());
+}
+
 void Player::moveItem(shared_ptr<ItemSearch> itemSearch, int xTo, int yTo, int zTo) {
+	cout << "[moving itemSearch, bpPos:" << itemSearch->bpPos << ", slotPos:" << itemSearch->slotPos << endl;
 	int fromBp = 64 + itemSearch->bpPos;
 
 	reinterpret_cast<void(__cdecl*)(int)>(this->moduleBase + 0xCB2A0)(0x78);
