@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="classes">
+      <UniqueIdentifier>{af10228a-7a52-4bd5-87d2-2f5cd4bcf5b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="socket">
+      <UniqueIdentifier>{4b070a5a-a66e-4ec0-aa4d-6f2342fadc20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="memory">
+      <UniqueIdentifier>{6049cf21-f50d-46ac-8af4-0fb1e903d594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui">
+      <UniqueIdentifier>{104586a6-2127-4519-ae4a-c3c67e52fbd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{6a543f1b-6d55-4470-93cd-ece8b3c8376e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="include.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CreaturePos.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="tipos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Container.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemSearch.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Containers.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerItem.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleList.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Creature.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketClient.h">
+      <Filter>socket</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStatus.h">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="memory.h">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsApi.h">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Overlay.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawing.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="hotkeys.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoList.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_win32.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx9.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="detours.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="CreaturePos.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Container.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Containers.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="ContainerItem.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemSearch.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Creature.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleList.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketClient.cpp">
+      <Filter>socket</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStatus.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="memory.cpp">
+      <Filter>memory</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsApi.cpp">
+      <Filter>memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Overlay.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawing.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="Directx.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="variables.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hotkeys.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoList.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="autoTasks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx9.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI2.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="detours.lib" />
+  </ItemGroup>
+</Project>
