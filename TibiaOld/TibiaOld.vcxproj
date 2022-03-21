@@ -177,6 +177,8 @@
     <ClInclude Include="imgui.h" />
     <ClInclude Include="hotkeys.h" />
     <ClInclude Include="InfoList.h" />
+    <ClInclude Include="NaviPlayerReader.h" />
+    <ClInclude Include="NaviPlayerSender.h" />
     <ClInclude Include="Overlay.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="Inventory.h" />
@@ -187,6 +189,7 @@
     <ClInclude Include="include.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Walker.h" />
     <ClInclude Include="WindowsApi.h" />
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +202,7 @@
     <ClCompile Include="hotkeys.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="ItemSearch.cpp" />
+    <ClCompile Include="NaviPlayerSender.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -224,6 +228,8 @@
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="imgui_tables.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
+    <ClCompile Include="NaviPlayerReader.cpp" />
+    <ClCompile Include="Walker.cpp" />
     <ClCompile Include="variables.h" />
     <ClCompile Include="WindowsApi.cpp" />
   </ItemGroup>

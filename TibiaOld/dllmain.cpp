@@ -11,8 +11,9 @@
 #include "variables.h";
 #include "hotkeys.h"
 
+const char* windowClasseName = "Imperium II";
 //const char* windowClasseName = "Old-UltraCl";
-const char* windowClasseName = "TibiaPVP cl";
+//const char* windowClasseName = "TibiaPVP cl";
 shared_ptr<Variables> v;
 
 DWORD WINAPI HackThread(HMODULE hModule) {
@@ -23,26 +24,36 @@ DWORD WINAPI HackThread(HMODULE hModule) {
 
     cout << "new version generated\n";
 
-    int moduleBase = (int)GetModuleHandle("Tibia.exe");
+    //int moduleBase = (int)GetModuleHandle("Tibia.exe");
     //int moduleBase = (int)GetModuleHandle("Old-Ultra.exe");
     //int moduleBase = (int)GetModuleHandle("Tibia Old Client.exe");
+    int moduleBase = (int)GetModuleHandle("Imperium_dx.exe");
     cout << "moduleBase: " << moduleBase << endl;
 
     v = make_shared<Variables>(moduleBase);
     thread guiThread([] {
-        //GUI::initGui();
         GUI::initImGui();
-    });
+        });
 
     v->autoTasks->enableAllConditionally();
 
     auto threadClient = v->client->initThread();
 
+    thread dash([] {
+        while (true) {
+            if (v->autoTasks->dash) {
+                v->player->walker->dash();
+            }
+            Sleep(50);
+        }
+    });
+
     initHotkeys();
     
-    v->autoTasks->joinThreads();
+    dash.join();
     threadClient.join();
     guiThread.join();
+    v->autoTasks->joinThreads();
 
     fclose(f);
     FreeConsole();
